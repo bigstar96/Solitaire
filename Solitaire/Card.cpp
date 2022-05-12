@@ -3,7 +3,8 @@
 
 namespace solitaire
 {
-	Card::Card(Type type, int x, int y) : 
+	Card::Card(HWND hwnd, Type type, int x, int y) : 
+		mHwnd(hwnd),
 		mX(x), mY(y),
 		mIsFront(false),
 		mType(type)
@@ -31,13 +32,21 @@ namespace solitaire
 
 	bool Card::CheckClicked(int mouseX, int mouseY)
 	{
-		// TODO : 마우스 클릭 체크
+		if (mouseX >= mX && mouseX <= mX + mBack->GetWidth() &&
+			mouseY >= mY && mouseY <= mY + mBack->GetHeight())
+		{
+			Flip(!mIsFront);
+			return true;
+		}
+
 		return false;
 	}
 
 	void Card::Flip(bool isFront)
 	{
 		mIsFront = isFront;
+
+		Invalidate();
 	}
 
 	void Card::Draw(Gdiplus::Graphics& graphics)
@@ -50,6 +59,16 @@ namespace solitaire
 		{
 			graphics.DrawImage(mBack.get(), mX, mY, mBack->GetWidth(), mBack->GetHeight());
 		}
+	}
+	void Card::Invalidate()
+	{
+		RECT rct{
+			mX, mY,
+			static_cast<LONG>(mX + mBack->GetWidth()),
+			static_cast<LONG>(mY + mBack->GetHeight())
+		};
+
+		InvalidateRect(mHwnd, &rct, false);
 	}
 }
 

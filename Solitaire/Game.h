@@ -14,9 +14,10 @@ namespace solitaire
 		std::unique_ptr<Gdiplus::Image> mBackground;
 		std::list<Card> mDeck;
 		int mFlipCount{};
+		HWND mHwnd{};
 
 	public:
-		void Init();
+		void Init(HWND hwnd);
 		void Release();
 
 		void Draw(Gdiplus::Graphics& graphics);
