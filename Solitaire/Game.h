@@ -15,6 +15,7 @@ namespace solitaire
 		std::list<Card> mDeck;
 		int mFlipCount{};
 		HWND mHwnd{};
+		Card* mpSelectedCard{};
 
 	public:
 		void Init(HWND hwnd);
